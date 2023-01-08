@@ -1,9 +1,9 @@
 # GeoSPARQL_TFM
 Archivos generados para la asignación automática de parcelas del IFN a municipios mediante GeoSPARQL
 
-### datos
+## datos
+- Shapefiles (capa puntos de parcelas, recintos municipios, parcelas asociadas con el municipio al que pertenecen (unión espacial))
 - Archivos RDF subidos a mi local host (*.ttl)
-- Shapefiles (parcelas, recintos municipios)
 - Archivo json de los recintos municipales
 
 ## Scripts
