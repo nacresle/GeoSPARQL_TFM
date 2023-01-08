@@ -1,0 +1,16 @@
+#Descargar parcelas con coordenadas de la ontologia del IFN
+
+curl -k -G https://crossforest.gsic.uva.es/sparql --data-urlencode query=' 
+PREFIX ifn: <https://datos.iepnb.es/def/sector-publico/medio-ambiente/ifn/>   
+PREFIX pos: <http://crossforest.eu/position/ontology/> 
+CONSTRUCT { 
+?plot a <https://datos.iepnb.es/def/sector-publico/medio-ambiente/ifn/Plot>;
+  pos:hasPosition ?pos. 
+?pos ?p ?o.
+}
+WHERE {
+  ?plot a <https://datos.iepnb.es/def/sector-publico/medio-ambiente/ifn/Plot>.
+?plot    pos:hasPosition ?pos .
+?pos ?p ?o.
+FILTER EXISTS {?pos pos:hasCoordinateReferenceSystem <http://epsg.w3id.org/data/crs/4326>. }
+}' -H "Accept: application/n-triples" > plots.ttl
