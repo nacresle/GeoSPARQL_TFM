@@ -5,7 +5,7 @@ Archivos generados para la asignación automática de parcelas del IFN a municip
 - Shapefiles (capa puntos de parcelas, recintos municipios, parcelas asociadas con el municipio al que pertenecen (unión espacial))
 - Archivos RDF subidos a mi local host (*.ttl)
 - Archivo json de los recintos municipales
-- CSVs descargados con datos de la ontología 
+- CSVs descargados de las consultas  
 
 ## Scripts
 - Scripts para automatizar procesos
