@@ -1,0 +1,54 @@
+#Fijar el directorio de trabajo
+cd QGIS_automatico
+
+
+####################Descarga coordenadas parcelas de Cross-Forest en csv############################
+###Descarga coordenadas parcelas guardar en UBUNTU carpeta home/natalia/QGIS_automatico
+
+curl -k -G https://crossforest.gsic.uva.es/sparql --data-urlencode query=' 
+PREFIX ifn: <https://datos.iepnb.es/def/sector-publico/medio-ambiente/ifn/>   
+PREFIX pos: <http://crossforest.eu/position/ontology/> 
+SELECT ?plot ?lat ?lng 
+WHERE {
+  ?plot a ifn:Plot ;
+     pos:hasPosition ?pos .
+  ?pos pos:hasCoordinateReferenceSystem <http://epsg.w3id.org/data/crs/4326> ;
+     <http://epsg.w3id.org/ontology/axis/106> ?lat ;
+	 <http://epsg.w3id.org/ontology/axis/107> ?lng .
+}' -H "Accept: text/csv" > plots.csv
+
+
+##############################QGIS########################################################
+#Convertir archivo csv de las parcelas a shapefile usando GDAL
+#Descargar GDAL en UBUNTU
+# sudo apt-get update && sudo apt-get install gdal-bin
+ogr2ogr -f "ESRI Shapefile" -oo X_POSSIBLE_NAMES=lng -oo Y_POSSIBLE_NAMES=lat -a_srs EPSG:4326 plots_IFN3.shp plots.csv 
+
+#gr2ogr: es la herramienta de línea de comandos de OGR (Simple Features Library), que se utiliza para realizar tareas de conversión y transformación de datos geoespaciales. En este caso, lo estamos utilizando para convertir un archivo CSV a un shapefile.
+#-f "ESRI Shapefile": indica el formato de salida del archivo, en este caso, un shapefile de ESRI.
+#-oo X_POSSIBLE_NAMES=lng: indica el nombre de la columna que contiene las coordenadas de longitud en el archivo CSV. El parámetro -oo se utiliza para indicar opciones específicas del driver de entrada. En este caso, estamos utilizando la opción X_POSSIBLE_NAMES para especificar que la columna lng contiene las coordenadas de longitud.
+#-oo Y_POSSIBLE_NAMES=lat: indica el nombre de la columna que contiene las coordenadas de latitud en el archivo CSV. Al igual que en el caso anterior, estamos utilizando la opción -oo para especificar que la columna lat contiene las coordenadas de latitud.
+#-a_srs: se utiliza para definir el sistema de coordenadas para el archivo shapefile de salida
+#output.shp: es el nombre del archivo shapefile de salida que se generará.
+#input.csv: es el nombre del archivo CSV de entrada que se utilizará para crear el shapefile.
+
+#Crear indice espacial para luego poder hacer la unión epacial
+ogrinfo -sql "CREATE SPATIAL INDEX ON plots_IFN3" plots_IFN3.shp
+
+#Hacer la union por localización
+qgis_process run native:joinattributesbylocation --INPUT=plots_IFN3.shp --JOIN=recintos_muni.shp --PREDICATE=5 --JOIN_FIELDS="" --METHOD=0 --DISCARD_NONMATCHING=0 --PREFIX="" --OUTPUT=Asig_plot_muni.shp
+
+#qgis_process run: Este es el comando de QGIS que se utiliza para iniciar un proceso de procesamiento de datos en segundo plano.
+#native:joinattributesbylocation: Este es el algoritmo de procesamiento de datos que se utilizará en este caso, que se llama "unir atributos por ubicación". Es un algoritmo nativo de QGIS que permite unir atributos de una capa a otra capa basándose en su posición relativa.
+#--INPUT=plots_IFN3.shp: Este parámetro especifica la capa de entrada que se utilizará para realizar la operación de unión. En este caso, la capa de entrada se llama "plots_IFN3.shp" y se espera que sea un archivo de forma (shapefile) con información de parcelas.
+#--JOIN=recintos_muni.shp: Este parámetro especifica la capa que se utilizará para unir atributos a la capa de entrada. En este caso, la capa se llama "recintos_muni.shp" y se espera que sea un archivo de forma con información de los municipios.
+#--PREDICATE=5: Este parámetro especifica el predicado de unión que se utilizará. En este caso, el valor 5 corresponde al predicado "intersecta". Esto significa que se unirán los atributos de las entidades que se intersecan en ambas capas.
+#--JOIN_FIELDS="": Este parámetro especifica los campos de la capa de unión que se unirán a la capa de entrada. En este caso, como se ha dejado en blanco, se unirán todos los campos de la capa de unión.
+#--METHOD=0: Este parámetro especifica el método de unión que se utilizará. En este caso, el valor 0 corresponde al método "creación de nuevos atributos". Esto significa que se crearán nuevos campos en la capa de entrada para almacenar los atributos de la capa de unión.
+#--DISCARD_NONMATCHING=0: Este parámetro especifica si se deben descartar las entidades que no se unen durante el proceso de unión. En este caso, se ha establecido en 0, lo que significa que se conservarán todas las entidades de la capa de entrada, incluso si no tienen coincidencias en la capa de unión.
+#--PREFIX="": Este parámetro especifica un prefijo opcional que se utilizará para los nuevos campos creados durante el proceso de unión. En este caso, como se ha dejado en blanco, no se utilizará ningún prefijo.
+#--OUTPUT=Asig_plot_muni.shp: Este parámetro especifica el nombre de archivo y la ubicación de la capa de salida que se creará después de que se complete la operación de unión. En este caso, la capa de salida se llamará "Asig_plot_muni.shp".
+ 
+
+#Convertir shp a GeoJSON
+ogr2ogr -f GeoJSON Asig_plot_muni.json Asig_plot_muni.shp

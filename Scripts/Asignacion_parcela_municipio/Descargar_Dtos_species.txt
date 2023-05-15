@@ -1,0 +1,17 @@
+#################################################################################################
+curl -k -G https://crossforest.gsic.uva.es/sparql --data-urlencode query=' 
+PREFIX ifn: <https://datos.iepnb.es/def/sector-publico/medio-ambiente/ifn/>   
+PREFIX ifn: <https://datos.iepnb.es/def/sector-publico/medio-ambiente/ifn/>   
+CONSTRUCT { 
+   ?plot ifn:containsSpeciesPlot ?infoSpeciesPlot.
+   ?infoSpeciesPlot ifn:hasBasalAreaInM2byHA ?G ;
+      ifn:hasNumberOfTreesInUnitsByHA ?N ;
+      ifn:hasSpecies ?species.   
+   }
+WHERE {
+   ?plot a <https://datos.iepnb.es/def/sector-publico/medio-ambiente/ifn/Plot>.
+   ?plot ifn:containsSpeciesPlot ?infoSpeciesPlot.
+   ?infoSpeciesPlot ifn:hasBasalAreaInM2byHA ?G ;
+      ifn:hasNumberOfTreesInUnitsByHA ?N ;
+      ifn:hasSpecies ?species.
+}' -H "Accept: application/n-triples" > Especies.ttl
