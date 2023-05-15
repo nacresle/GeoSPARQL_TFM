@@ -5,8 +5,8 @@ Archivos generados para la asignación automática de parcelas del IFN3 a munici
 Contiene las siguientes carpetas:
 - **Asignacion_parcela_muni**: contiene los resultados de las asignaciones en formato Turtle (Fuseki) y Shapefile (QGIS) de las parcelas del IFN3 al código INE del municipio en el que se encuentran. 
 - **CSVs**: contiene distintos CSVs de datos descargados del repositorio Cross-Forest, del IFN3 y datos generados.
-- Descarga_Croos_Forest: archivos Turtle cargados en los entornos de pruebas
-- Recintos_municipales: contiene todos los recintos municipales españoles en formato Shapefile, GeoJSON y Turtle. 
+- **Descarga_Croos_Forest**: archivos Turtle cargados en los entornos de pruebas
+- **Recintos_municipales**: contiene todos los recintos municipales españoles en formato Shapefile, GeoJSON y Turtle. 
 
 ## Mapas
 Contiene las siguientes carpetas con Shapefiles que representan las especies dominantes de los municipios según su área basimétrica media máxima (G) y el número medio de pies/ha(N), tomando en cuenta datos del IFN3, para:
