@@ -7,6 +7,7 @@ Contiene las siguientes carpetas:
 - **CSVs**: contiene distintos CSVs de datos descargados del repositorio Cross-Forest, del IFN3 y datos generados.
 - **Descarga_Croos_Forest**: archivos Turtle cargados en los entornos de pruebas
 - **Recintos_municipales**: contiene todos los recintos municipales españoles en formato Shapefile, GeoJSON y Turtle. 
+- **SHP_Parcelas_IFN3**: contiene un archivo de puntos con las localizaciones de las parcelas del IFN3 en formato Shapefile. 
 
 ## Mapas
 Contiene las siguientes carpetas con Shapefiles que representan las especies dominantes de los municipios según su área basimétrica media máxima (G) y el número medio de pies/ha(N), tomando en cuenta datos del IFN3, para:
