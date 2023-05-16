@@ -1,2 +1,8 @@
-/datos/plots.ttl filter=lfs diff=lfs merge=lfs -text
+/Datos/Descarga_Cross_Forest/plots.ttl filter=lfs diff=lfs merge=lfs -text
 plots.ttl filter=lfs diff=lfs merge=lfs -text
+
+/Datos/Descarga_Cross_Forest/Especies.ttl filter=lfs diff=lfs merge=lfs -text
+Especies.ttl filter=lfs diff=lfs merge=lfs -text
+
+/Datos/Recintos_municipales/Recintos_TODO.ttl filter=lfs diff=lfs merge=lfs -text
+Recintos_TODO.ttl filter=lfs diff=lfs merge=lfs -text
