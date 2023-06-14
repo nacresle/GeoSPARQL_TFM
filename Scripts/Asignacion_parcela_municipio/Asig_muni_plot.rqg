@@ -1,0 +1,27 @@
+BASE <https://datos.iepnb.es/recurso/sector-publico/medio-ambiente/ifn/>
+PREFIX iter: <http://w3id.org/sparql-generate/iter/>
+PREFIX fun: <http://w3id.org/sparql-generate/fn/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+PREFIX ifn: <https://datos.iepnb.es/def/sector-publico/medio-ambiente/ifn/>
+PREFIX municipality: <https://datos.iepnb.es/recurso/sector-publico/medio-ambiente/ifn/municipality>
+PREFIX plot: <https://datos.iepnb.es/recurso/sector-publico/medio-ambiente/ifn/plot>
+
+GENERATE {
+
+    <plot/{?IDPLOT}> ifn:isInMunicipality <municipality/{?IDMUNI}> ;
+	.
+
+}
+
+SOURCE <urn:source> AS ?source
+ITERATOR iter:GeoJSON(?source) AS ?geometry ?properties
+WHERE {
+   BIND(fun:JSONPath(?properties, "$.plot") AS ?idPlot)
+   BIND(STRAFTER(?idPlot, "plot/") AS ?IDPLOT)
+   BIND(xsd:integer(?idPlot) AS ?IDPLOT_INT)
+   BIND(fun:JSONPath(?properties, "$.IDmuni") AS ?idmuni)
+   BIND("{?idmuni}" AS ?IDMUNI)
+   BIND(xsd:integer(?idmuni) AS ?IDMUNI_INT)
+}
+
+
