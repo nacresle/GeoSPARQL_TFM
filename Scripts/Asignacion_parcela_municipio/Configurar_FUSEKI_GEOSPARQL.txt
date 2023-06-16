@@ -1,49 +1,11 @@
 #WINDOWS
 cd C:\Users\Usuario\Desktop\MASTER\_0_TFM\FUSEKI\apache-jena-fuseki-4.7.0
 
-####################################################################################################################################################33
-#CARGAR DATOS
+####################################################################################################################################################
+#CARGAR DATOS TODOS DE UNA CARPETA
 java -jar jena-fuseki-geosparql-4.7.0.jar -rf Datos\*.ttl --index_expiry 50000000000000,500000000000,500000000000 -p 3034 -t ./geosparql-tdb2 -t2 --update --spatial_index ./geosparql-tdb2/spatial.index -d Municipios
 
+#CARGAR ARCHIVOS SUELTOS
 #java -jar jena-fuseki-geosparql-4.7.0.jar -rf Datos\recintos_TODO.ttl --index_expiry 50000000000000,500000000000,500000000000 -p 3034 -t ./geosparql-tdb2 -t2 --update --spatial_index ./geosparql-tdb2/spatial.index -d Municipios
 #java -jar jena-fuseki-geosparql-4.7.0.jar -rf Datos\municipios.ttl --index_expiry 50000000000000,500000000000,500000000000 -p 3034 -t ./geosparql-tdb2 -t2 --update --spatial_index ./geosparql-tdb2/spatial.index -d Municipios
 #java -jar jena-fuseki-geosparql-4.7.0.jar -rf Datos\plots.ttl --index_expiry 50000000000000,500000000000,500000000000 -p 3034 -t ./geosparql-tdb2 -t2 --update --spatial_index ./geosparql-tdb2/spatial.index -d Municipios
-
-
-    "-rf Datos*.ttl": indica que se deben cargar en memoria los archivos con extensión ".ttl" (Turtle RDF) que se encuentren en la carpeta "Datos".
-    "--index_expiry 50000000000000,500000000000,500000000000": establece los tiempos de expiración de los índices utilizados por el programa.
-    "-p 3034": indica el puerto en el que se va a escuchar las solicitudes HTTP.
-    "-t ./geosparql-tdb2": indica la carpeta en la que se va a guardar la base de datos TDB (triple store).
-    "-t2": indica que se deben usar dos bases de datos TDB, una para datos y otra para índices espaciales.
-    "--update": permite realizar operaciones de actualización en la base de datos.
-    "--spatial_index ./geosparql-tdb2/spatial.index": indica la ubicación de los índices espaciales que se van a utilizar.
-	"-d Nombre de la base de datos, en este caso Municipios
-
-#####################################################################################################################################################################################################
-#INICIAR SERVIDOR
-cd C:\Users\Usuario\Desktop\MASTER\_0_TFM\FUSEKI\apache-jena-fuseki-4.7.0
-java -jar jena-fuseki-geosparql-4.7.0.jar --index_expiry 50000000000000,500000000000,500000000000 -p 3034 -t ./geosparql-tdb2 -t2 --update --spatial_index ./geosparql-tdb2/spatial.index -d Municipios 
-
-###############################################################################################################################################################################################
-#CONSULTAS ASIGNACION MUNICIPIOS A PARCELAS
-curl -X POST --data #solicitud POST a un servidor SPARQL "query=
-PREFIX spatialF: <http://jena.apache.org/function/spatial#> 
-PREFIX wkt: <http://www.opengis.net/ont/geosparql#> 
-PREFIX spo: <http://crossforest.eu/position/ontology/> 
-PREFIX geof: <http://www.opengis.net/def/function/geosparql/> 
-PREFIX ifn: <https://datos.iepnb.es/def/sector-publico/medio-ambiente/ifn/> 
-PREFIX crs: <http://epsg.w3id.org/data/crs/>
-PREFIX axis: <http://epsg.w3id.org/ontology/axis/>
-CONSTRUCT {?plot  ifn:isInMunicipality ?muni} 
-WHERE { 
-   ?plot a ifn:Plot; spo:hasPosition ?spo. 
-   ?spo spo:hasCoordinateReferenceSystem crs:4326; 
-     axis:106 ?lat;  
-     axis:107 ?lng .  
-   ?muni spo:hasPolygon ?poly .  
-   ?poly wkt:asWKT ?wkt_muni.  
-   BIND(spatialF:convertLatLon(?lat, ?lng) as ?point)  
-   FILTER(geof:sfWithin(?point, ?wkt_muni)).
-}" -H 'Accept:application/x-turtle' #Resultados generados en formato Turtle
-http://localhost:3034/Municipios/query #Servidor SPARQL de Fuseki configurado anteriormente
-> Asig_plot_N.ttl #archivo resultante
