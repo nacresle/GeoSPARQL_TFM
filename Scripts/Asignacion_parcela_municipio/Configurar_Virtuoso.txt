@@ -1,4 +1,4 @@
-#######Fijar directorio donde voy a guardar los datos
+#######Fijar directorio donde voy a guardar los datos del contenedor
 cd C:\Users\Usuario\Desktop\MASTER\_0_TFM\Datos_Virtuoso
 
 ########Creacion de una instancia de Virtuoso en modo demonio WINDOWS
