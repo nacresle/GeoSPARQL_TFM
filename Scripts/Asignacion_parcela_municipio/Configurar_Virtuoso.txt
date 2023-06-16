@@ -1,8 +1,5 @@
 #######Fijar directorio donde voy a guardar los datos
 cd C:\Users\Usuario\Desktop\MASTER\_0_TFM\Datos_Virtuoso
- 
-########Borrar el contenedor 
-docker rm my_virtdb
 
 ########Creacion de una instancia de Virtuoso en modo demonio WINDOWS
 docker run --name my_virtdb  -d --env DBA_PASSWORD=mysecret --publish 1111:1111 --publish  8890:8890 --volume C:\Users\Usuario\Desktop\MASTER\_0_TFM\Datos_Virtuoso:/database --volume C:\Users\Usuario\Desktop\MASTER\_0_TFM\Datos:/datos openlink/virtuoso-opensource-7:latest
