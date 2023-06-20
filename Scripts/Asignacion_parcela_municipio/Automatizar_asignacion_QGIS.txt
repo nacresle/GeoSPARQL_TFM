@@ -52,3 +52,6 @@ qgis_process run native:joinattributesbylocation --INPUT=plots_IFN3.shp --JOIN=r
 
 #Convertir shp a GeoJSON
 ogr2ogr -f GeoJSON Asig_plot_muni.json Asig_plot_muni.shp
+
+#Utiliza el SPARQL-Generate para transformar el GeoJSON a RDF
+sh sparql-generate.sh -q /home/natalia/QGIS_automatico/Asig_muni_plot.rqg -i "/home/natalia/QGIS_automatico/Asig_plot_muni.json" -p -Xmx10000M -v
